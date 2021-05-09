@@ -1,7 +1,9 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
-import { StyleSheet, View, KeyboardAvoidingView } from 'react-native';
+import { Alert } from 'react-native';
+import { Dimensions, StyleSheet, View, KeyboardAvoidingView } from 'react-native';
 import { Button, Input, Text, Image } from 'react-native-elements'
+import { auth } from '../firebase';
 const RegisterScreen = ({ navigation }) => {
 
     const [name, setName] = useState('');
@@ -11,15 +13,28 @@ const RegisterScreen = ({ navigation }) => {
 
 
     const register = () => {
+        auth.createUserWithEmailAndPassword(email, password)
+        .then( (userCredential) =>  {
+            var user = userCredential.user;
 
+            user.updateProfile({
+                displayName: name,
+                photoURL: imageUrl? imageUrl : 'https://cencup.com/wp-content/uploads/2019/07/avatar-placeholder.png'
+            })
+            alert('Usuario Cadastrado')
+        }
+           
+        )
+        .catch((error) => alert(error.message));
     }
 
-    // useLayoutEffect(() => {
-    //     navigation.setOptions({
-    //         headerBackTitle: 'headerBackTitle'
-    //     });
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerBackTitle: 'headerBackTitle',
+            
+        });
         
-    // }, [navigation])
+    }, [navigation])
 
     return (
         <KeyboardAvoidingView behavior='padding' style={styles.container}>
@@ -76,7 +91,7 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     inputContainer: {
-        width: 350
+        width: 270,
     }
 })
 export default RegisterScreen;
