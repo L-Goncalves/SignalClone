@@ -1,4 +1,4 @@
-# SignalClone
+# Clone do App Signal
 
 <h4 align="center"> 
 	⚠  App clone do Signal| Em Andamento ⚠
